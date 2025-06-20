@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %}홈 - 아학방페{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/manage.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<!-- add1_아이관리구현법 -->
+<!-- 여기에 홈 페이지에 필요한 내용을 추가 -->
+
+<div class="main-div">
+  <div class="board">
+    <h1>아동 정보 입력</h1>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="POST" action="{% url 'manage_register' %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="name">이름</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="id">아이디</label>
+            <input type="text" id="teacher_id" name="teacher_id" required>
+        </div>
+        <button type="submit">등록</button>
+      </form>
+  </div>
+</div>
+  <script>
+    function saveUserInfo() {
+      let userName = document.getElementById("name").value;
+      let userId = document.getElementById("id").value;
+
+      if (!userName || !userId) {
+        alert("이름과 아이디를 입력하세요.");
+        return;
+      }
+
+      // 이름 & 아이디 저장
+      localStorage.setItem("userName", userName);
+      localStorage.setItem("userId", userId);
+
+      location.href = "/manage_register/";
+
+    }
+  </script>
+  {% endblock %}

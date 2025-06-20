@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}일일 체크리스트{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/survey1.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- add1_일일위험구현법 -->
+<div class="main-div">
+  <div class="board">
+    <h1>정서적 상태 및 학습 태도</h1>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="POST" action="{% url 'survey3' %}">
+      {% csrf_token %}
+      <input type="hidden" name="name" value="{{ name }}">
+      <input type="hidden" name="teacher_id" value="{{ teacher_id }}">
+      <input type="hidden" name="total_score" value="{{ total_score }}">
+      <h3>11. 아이가 수업 중에도 지속적으로 집중하지 못하거나 산만한 모습을 보이나요?</h3>
+      <div class="radio-group">
+          <label for="Q11_1"><input type="radio" name="Q11" id="Q11_1" value="매우 아니다" required> 매우 아니다</label>
+          <label for="Q11_2"><input type="radio" name="Q11" id="Q11_2" value="아니다"> 아니다</label>
+          <label for="Q11_3"><input type="radio" name="Q11" id="Q11_3" value="보통"> 보통</label>
+          <label for="Q11_4"><input type="radio" name="Q11" id="Q11_4" value="맞다"> 맞다</label>
+          <label for="Q11_5"><input type="radio" name="Q11" id="Q11_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <h3>12. 아이가 또래 친구들과의 관계에서 지속적으로 위축되거나 왕따를 당하는 모습이 보이나요?</h3>
+      <div class="radio-group">
+          <label for="Q12_1"><input type="radio" name="Q12" id="Q12_1" value="매우 아니다" required> 매우 아니다</label>
+          <label for="Q12_2"><input type="radio" name="Q12" id="Q12_2" value="아니다"> 아니다</label>
+          <label for="Q12_3"><input type="radio" name="Q12" id="Q12_3" value="보통"> 보통</label>
+          <label for="Q12_4"><input type="radio" name="Q12" id="Q12_4" value="맞다"> 맞다</label>
+          <label for="Q12_5"><input type="radio" name="Q12" id="Q12_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <h3>13. 아이가 지속적으로 슬퍼하거나 무기력한 상태를 보이나요?</h3>
+      <div class="radio-group">
+          <label for="Q13_1"><input type="radio" name="Q13" id="Q13_1" value="매우 아니다" required> 매우 아니다</label>
+          <label for="Q13_2"><input type="radio" name="Q13" id="Q13_2" value="아니다"> 아니다</label>
+          <label for="Q13_3"><input type="radio" name="Q13" id="Q13_3" value="보통"> 보통</label>
+          <label for="Q13_4"><input type="radio" name="Q13" id="Q13_4" value="맞다"> 맞다</label>
+          <label for="Q13_5"><input type="radio" name="Q13" id="Q13_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <h3>14. 최근 아이가 식사량이 갑자기 줄었거나 과식하는 경향을 보이나요?</h3>
+      <div class="radio-group">
+          <label for="Q14_1"><input type="radio" name="Q14" id="Q14_1" value="매우 아니다" required> 매우 아니다</label>
+          <label for="Q14_2"><input type="radio" name="Q14" id="Q14_2" value="아니다"> 아니다</label>
+          <label for="Q14_3"><input type="radio" name="Q14" id="Q14_3" value="보통"> 보통</label>
+          <label for="Q14_4"><input type="radio" name="Q14" id="Q14_4" value="맞다"> 맞다</label>
+          <label for="Q14_5"><input type="radio" name="Q14" id="Q14_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <h3>15. 아이가 또래보다 말이 늦거나, 언어 표현이 제한적인 모습을 보이나요?</h3>
+      <div class="radio-group">
+          <label for="Q15_1"><input type="radio" name="Q15" id="Q15_1" value="매우 아니다" required> 매우 아니다</label>
+          <label for="Q15_2"><input type="radio" name="Q15" id="Q15_2" value="아니다"> 아니다</label>
+          <label for="Q15_3"><input type="radio" name="Q15" id="Q15_3" value="보통"> 보통</label>
+          <label for="Q15_4"><input type="radio" name="Q15" id="Q15_4" value="맞다"> 맞다</label>
+          <label for="Q15_5"><input type="radio" name="Q15" id="Q15_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <div class="button-container">
+          <a href="{% url 'survey2' %}"><button type="button">이전 페이지</button></a>
+          <button type="submit">제출</button>
+      </div>
+    </form>
+  </div>
+</div>
+  <script>
+    function submitSurvey() {
+      let surveyData = JSON.parse(localStorage.getItem("surveyData")) || {};
+
+      let allQuestions = document.querySelectorAll("h3");
+      let checkedInputs = document.querySelectorAll("input[type='radio']:checked");
+
+      if (checkedInputs.length < allQuestions.length) {
+        alert("모든 문항에 응답해야 제출할 수 있습니다.");
+        return;
+      }
+
+      checkedInputs.forEach(q => {
+        surveyData[q.name] = q.value;
+      });
+
+      // 로컬 시간으로 날짜 저장
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      surveyData.date = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+      let allResponses = JSON.parse(localStorage.getItem("allResponses")) || [];
+      allResponses.push(surveyData);
+      localStorage.setItem("allResponses", JSON.stringify(allResponses));
+
+      alert("설문이 제출되었습니다.");
+      location.href = "{% url 'result' %}";
+    }
+
+    function saveSurveyData(nextPage) {
+    let surveyData = JSON.parse(localStorage.getItem("surveyData")) || {};
+    let allQuestions = document.querySelectorAll("h3"); // 모든 질문 가져오기
+    let checkedInputs = document.querySelectorAll("input[type='radio']:checked"); // 선택된 답변 가져오기
+
+    if (checkedInputs.length < allQuestions.length) {
+      alert("모든 문항에 응답해야 다음 페이지로 이동할 수 있습니다.");
+      return; // 페이지 이동 막기
+    }
+
+    checkedInputs.forEach(q => {
+      surveyData[q.name] = q.value;
+    });
+
+    localStorage.setItem("surveyData", JSON.stringify(surveyData));
+
+    var nextPage = document.getElementById("nextButton").getAttribute("data-next-url");
+
+    if (nextPage) {
+      window.location.href = nextPage;
+    }
+  }
+  </script>
+  {% endblock %}

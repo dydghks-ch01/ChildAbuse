@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}아학방페{% endblock %}</title>
+    <link rel='stylesheet' href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+      {% block head %}{% endblock %}
+    <style>
+      /* 추가 스타일이 필요하면 여기에 작성 */
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-left">
+        <a href="{% url 'main' %}" class="logo-container">
+          <img src="{% static 'images/logo.png' %}" alt="로고">
+          <h1>아동학대 예방 및 신고 시스템</h1>
+        </a>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="{% url 'manage' %}">아이 관리</a></li>
+          <li><a href="{% url 'check' %}">일일 보고</a></li>
+          <li><a href="{% url 'danger' %}">위험도</a></li>
+          <li><a href="{% url 'report' %}">신고 및 연락망</a></li>
+        </ul>
+      </nav>
+      <div class="header-right">
+        <a href="{% url 'logout' %}" class="logout-btn">로그아웃</a>
+      </div>
+    </header>
+
+    <main>
+      {% block content %}
+      <!-- 각 페이지별로 동적으로 내용이 들어갑니다. -->
+      {% endblock %}
+    </main>
+  </body>
+</html>

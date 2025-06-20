@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}일일 체크리스트{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/survey1.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- add1_일일위험구현법 -->
+<div class="main-div">
+  <div class="board">
+    <h1>가정 환경 및 부모와의 관계</h1>
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form method="POST" action="{% url 'survey2' %}">
+      {% csrf_token %}
+      <input type="hidden" name="name" value="{{ name }}">
+      <input type="hidden" name="teacher_id" value="{{ teacher_id }}">
+      <input type="hidden" name="total_score" value="{{ total_score }}">
+      <h3>6. 부모가 등·하원 시 아이에게 과도한 신체적 접촉(거칠게 다루기, 밀치기 등)을 하나요?</h3>
+      <div class="radio-group">
+        <label for="Q6_1"><input type="radio" name="Q6" id="Q6_1" value="매우 아니다" required> 매우 아니다</label>
+        <label for="Q6_2"><input type="radio" name="Q6" id="Q6_2" value="아니다"> 아니다</label>
+        <label for="Q6_3"><input type="radio" name="Q6" id="Q6_3" value="보통"> 보통</label>
+        <label for="Q6_4"><input type="radio" name="Q6" id="Q6_4" value="맞다"> 맞다</label>
+        <label for="Q6_5"><input type="radio" name="Q6" id="Q6_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <h3>7. 부모가 아이에게 위협적인 언행(“말 안 들으면 혼난다”, “집에 가면 알지?” 등)을 하나요?</h3>
+      <div class="radio-group">
+        <label for="Q7_1"><input type="radio" name="Q7" id="Q7_1" value="매우 아니다" required> 매우 아니다</label>
+        <label for="Q7_2"><input type="radio" name="Q7" id="Q7_2" value="아니다"> 아니다</label>
+        <label for="Q7_3"><input type="radio" name="Q7" id="Q7_3" value="보통"> 보통</label>
+        <label for="Q7_4"><input type="radio" name="Q7" id="Q7_4" value="맞다"> 맞다</label>
+        <label for="Q7_5"><input type="radio" name="Q7" id="Q7_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <h3>8. 아이가 부모와의 관계에 대해 말할 때 지속적으로 부정적인 표현을 하나요?</h3>
+      <div class="radio-group">
+        <label for="Q8_1"><input type="radio" name="Q8" id="Q8_1" value="매우 아니다" required> 매우 아니다</label>
+        <label for="Q8_2"><input type="radio" name="Q8" id="Q8_2" value="아니다"> 아니다</label>
+        <label for="Q8_3"><input type="radio" name="Q8" id="Q8_3" value="보통"> 보통</label>
+        <label for="Q8_4"><input type="radio" name="Q8" id="Q8_4" value="맞다"> 맞다</label>
+        <label for="Q8_5"><input type="radio" name="Q8" id="Q8_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <h3>9. 아이가 가정에서의 생활에 대해 이야기할 때 비정상적으로 회피하는 경향을 보이나요?</h3>
+      <div class="radio-group">
+        <label for="Q9_1"><input type="radio" name="Q9" id="Q9_1" value="매우 아니다" required> 매우 아니다</label>
+        <label for="Q9_2"><input type="radio" name="Q9" id="Q9_2" value="아니다"> 아니다</label>
+        <label for="Q9_3"><input type="radio" name="Q9" id="Q9_3" value="보통"> 보통</label>
+        <label for="Q9_4"><input type="radio" name="Q9" id="Q9_4" value="맞다"> 맞다</label>
+        <label for="Q9_5"><input type="radio" name="Q9" id="Q9_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <h3>10. 부모가 등·하원 시 눈에 띄게 화가 나 있거나 감정 기복이 심한 모습을 보이나요?</h3>
+      <div class="radio-group">
+        <label for="Q10_1"><input type="radio" name="Q10" id="Q10_1" value="매우 아니다" required> 매우 아니다</label>
+        <label for="Q10_2"><input type="radio" name="Q10" id="Q10_2" value="아니다"> 아니다</label>
+        <label for="Q10_3"><input type="radio" name="Q10" id="Q10_3" value="보통"> 보통</label>
+        <label for="Q10_4"><input type="radio" name="Q10" id="Q10_4" value="맞다"> 맞다</label>
+        <label for="Q10_5"><input type="radio" name="Q10" id="Q10_5" value="매우 맞다"> 매우 맞다</label>
+      </div>
+      <div class="button-container">
+        <a href="{% url 'survey1' %}"><button type="button">이전 페이지</button></a>
+        <button type="submit">다음 페이지</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function checkLogin() {
+    let userName = localStorage.getItem("userName");
+    let userId = localStorage.getItem("userId");
+
+    if (!userName || !userId) {
+      alert("로그인이 필요합니다.");
+      location.href = "{% url 'check' %}";
+    }
+  }
+
+
+  function goHome() {
+    location.href = "{% url 'check' %}"
+  }
+
+  function saveSurveyData(nextPage) {
+    let surveyData = JSON.parse(localStorage.getItem("surveyData")) || {};
+    let allQuestions = document.querySelectorAll("h3"); // 모든 질문 가져오기
+    let checkedInputs = document.querySelectorAll("input[type='radio']:checked"); // 선택된 답변 가져오기
+
+    if (checkedInputs.length < allQuestions.length) {
+      alert("모든 문항에 응답해야 다음 페이지로 이동할 수 있습니다.");
+      return; // 페이지 이동 막기
+    }
+
+    checkedInputs.forEach(q => {
+      surveyData[q.name] = q.value;
+    });
+
+    localStorage.setItem("surveyData", JSON.stringify(surveyData));
+
+    var nextPage = document.getElementById("nextButton").getAttribute("data-next-url");
+
+    if (nextPage) {
+      window.location.href = nextPage;
+    }
+  }
+
+
+  document.addEventListener("DOMContentLoaded", checkLogin);
+</script>
+{% endblock %}

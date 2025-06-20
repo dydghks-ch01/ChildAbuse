@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %}홈 - 아학방페{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/manage_form.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<!-- add1_아이관리구현법 -->
+<!-- 여기에 홈 페이지에 필요한 내용을 추가 -->
+<div class="main-div">
+  <div class="board">
+    <h1>추가 정보 입력</h1>
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form method="POST" action="{% url 'manage_form' %}">
+      {% csrf_token %}
+      <fieldset>
+        <legend>아동 정보</legend>
+        <ul>
+          <li>
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" required>
+          </li>
+          <li>
+            <label for="sex">성별</label>
+            <label>
+              <input type="radio" id="male" name="sex" value="남" required> 남성
+            </label>
+            <label>
+              <input type="radio" id="female" name="sex" value="여" required> 여성
+            </label>
+          </li>
+          <li>
+            <label for="age">연령</label>
+            <input type="text" id="age" name="age" required>
+          </li>
+          <li>
+            <label for="weight">몸무게(kg)</label>
+            <input type="text" id="weight" name="weight" required>
+          </li>
+          <li>
+            <label for="height">키(cm)</label>
+            <input type="text" id="height" name="height" required>
+          </li>
+          <li>
+            <label for="family_type">가족 유형</label>
+            <select id="family_type" name="family_type" required>
+              <option value="">선택하세요</option>
+              <option value="핵가족">핵가족</option>
+              <option value="확대가족">확대가족</option>
+              <option value="노인가족">노인가족</option>
+              <option value="한부모가족-부">한부모가족-부</option>
+              <option value="한부모가족-모">한부모가족-모</option>
+              <option value="계부모가족">계부모가족</option>
+              <option value="혼합가족">혼합가족</option>
+              <option value="위탁가족">위탁가족</option>
+              <option value="다문화가족">다문화가족</option>
+            </select>
+          </li>
+          <li>
+            <label for="father_age">아버지 나이</label>
+            <input type="text" id="father_age" name="father_age" required>
+          </li>
+          <li>
+            <label for="mother_age">어머니 나이</label>
+            <input type="text" id="mother_age" name="mother_age" required>
+          </li>
+          <li>
+            <label for="region">거주 지역</label>
+            <select id="region" name="region" required>
+              <option value="">선택하세요</option>
+              <option value="도봉구">도봉구</option>
+              <option value="노원구">노원구</option>
+              <option value="성북구">성북구</option>
+              <option value="강남구">강남구</option>
+              <option value="강북구">강북구</option>
+            </select>
+          </li>
+          <li>
+            <label>우울감 정도</label>
+            <div class="radio-group">
+              <label><input type="radio" name="depression" value="매우 좋지 않음" required> 매우 좋지 않음</label>
+              <label><input type="radio" name="depression" value="좋지 않음"> 좋지 않음</label>
+              <label><input type="radio" name="depression" value="보통"> 보통</label>
+              <label><input type="radio" name="depression" value="좋음"> 좋음</label>
+              <label><input type="radio" name="depression" value="매우 좋음"> 매우 좋음</label>
+            </div>
+          </li>
+          <li>
+            <label>부모와의 관계</label>
+            <div class="radio-group">
+              <label><input type="radio" name="parent_relation" value="매우 좋지 않음" required> 매우 좋지 않음</label>
+              <label><input type="radio" name="parent_relation" value="좋지 않음"> 좋지 않음</label>
+              <label><input type="radio" name="parent_relation" value="보통"> 보통</label>
+              <label><input type="radio" name="parent_relation" value="좋음"> 좋음</label>
+              <label><input type="radio" name="parent_relation" value="매우 좋음"> 매우 좋음</label>
+            </div>
+          </li>
+          <li>
+            <label>교우 관계</label>
+            <div class="radio-group">
+              <label><input type="radio" name="friend_relation" value="매우 좋지 않음" required> 매우 좋지 않음</label>
+              <label><input type="radio" name="friend_relation" value="좋지 않음"> 좋지 않음</label>
+              <label><input type="radio" name="friend_relation" value="보통"> 보통</label>
+              <label><input type="radio" name="friend_relation" value="좋음"> 좋음</label>
+              <label><input type="radio" name="friend_relation" value="매우 좋음"> 매우 좋음</label>
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+      <div class="button-container">
+        <button type="submit">제출하기</button>
+        <a href="{% url 'manage' %}"><button>뒤로가기</button></a>
+      </div>
+    </form>
+    <!--
+  <div class="button-container">
+    <button onclick="submitInfo()">제출하기</button>
+    <a href="{% url 'manage' %}"><button>뒤로가기</button></a>
+  </div>
+  -->
+  </div>
+</div>
+
+<script>
+  // function submitInfo() {
+  //   let userName = localStorage.getItem("userName");
+  //   let userId = localStorage.getItem("userId");
+
+  //   if (!userName || !userId) {
+  //     alert("이름과 아이디가 없습니다. 먼저 정보를 입력하세요.");
+  //     location.href = "manage.html";
+  //     return;
+  //   }
+
+  //   let userInfo = {
+  //     name: userName,
+  //     id: userId,
+  //     sex: document.getElementById("sex").value,
+  //     age: document.getElementById("age").value,
+  //     weight: document.getElementById("weight").value,
+  //     height: document.getElementById("height").value,
+  //     family_type: document.getElementById("family_type").value
+  //   };
+
+  //   if (!userInfo.sex || !userInfo.age || !userInfo.weight || !userInfo.height || !userInfo.family_type) {
+  //     alert("모든 항목을 입력하세요.");
+  //     return;
+  //   }
+
+  //   let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+
+  //   // 같은 아이디를 가진 기존 데이터 찾기
+  //   let existingUserIndex = allUsers.findIndex(user => user.id === userId);
+
+  //   if (existingUserIndex !== -1) {
+  //     allUsers[existingUserIndex] = userInfo;  // 기존 데이터 덮어쓰기
+  //   } else {
+  //     allUsers.push(userInfo);  // 새로운 데이터 추가
+  //   }
+
+  //   localStorage.setItem("allUsers", JSON.stringify(allUsers));
+
+  //   alert("정보가 저장되었습니다.");
+  //   location.href = "{% url 'manage_form' %}";
+  // }
+</script>
+
+{% endblock %}

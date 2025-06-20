@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}아동 상세 정보 - 아학방페{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/manage_form.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- add1_아이관리구현법 -->
+<div class="main-div">
+    <div class="board">
+        <h1>아동 상세 정보</h1>
+        <form method="POST" action="{% url 'manage_detail' child.id %}">
+            {% csrf_token %}
+            <fieldset>
+                <legend>아동 정보</legend>
+                <ul>
+                    <li>
+                        <label for="name">이름</label>
+                        <input type="text" id="name" name="name" value="{{ child.name }}" readonly>
+                    </li>
+                    <li>
+                        <label for="sex">성별</label>
+                        <input type="text" id="sex" name="sex" value="{{ child.sex }}" readonly>
+                    </li>
+                    <li>
+                        <label for="age">연령</label>
+                        <input type="text" id="age" name="age" value="{{ child.age }}" readonly>
+                    </li>
+                    <li>
+                        <label for="weight">몸무게(kg)</label>
+                        <input type="text" id="weight" name="weight" value="{{ child.weight }}" readonly>
+                    </li>
+                    <li>
+                        <label for="height">키(cm)</label>
+                        <input type="text" id="height" name="height" value="{{ child.height }}" readonly>
+                    </li>
+                    <li>
+                        <label for="family_type">가족 유형</label>
+                        <select id="family_type" name="family_type" disabled>
+                            <option value="" {% if not child.family_type %}selected{% endif %}>선택하세요</option>
+                            <option value="핵가족" {% if child.family_type == "핵가족" %}selected{% endif %}>핵가족</option>
+                            <option value="확대가족" {% if child.family_type == "확대가족" %}selected{% endif %}>확대가족</option>
+                            <option value="노인가족" {% if child.family_type == "노인가족" %}selected{% endif %}>노인가족</option>
+                            <option value="한부모가족-부" {% if child.family_type == "한부모가족-부" %}selected{% endif %}>한부모가족-부</option>
+                            <option value="한부모가족-모" {% if child.family_type == "한부모가족-모" %}selected{% endif %}>한부모가족-모</option>
+                            <option value="계부모가족" {% if child.family_type == "계부모가족" %}selected{% endif %}>계부모가족</option>
+                            <option value="혼합가족" {% if child.family_type == "혼합가족" %}selected{% endif %}>혼합가족</option>
+                            <option value="위탁가족" {% if child.family_type == "위탁가족" %}selected{% endif %}>위탁가족</option>
+                            <option value="다문화가족" {% if child.family_type == "다문화가족" %}selected{% endif %}>다문화가족</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="father_age">아버지 나이</label>
+                        <input type="text" id="father_age" name="father_age" value="{{ child.father_age }}" readonly>
+                    </li>
+                    <li>
+                        <label for="mother_age">어머니 나이</label>
+                        <input type="text" id="mother_age" name="mother_age" value="{{ child.mother_age }}" readonly>
+                    </li>
+                    <li>
+                        <label for="region">거주 지역</label>
+                        <select id="region" name="region" disabled>
+                            <option value="" {% if not child.region %}selected{% endif %}>선택하세요</option>
+                            <option value="도봉구" {% if child.region == "도봉구" %}selected{% endif %}>도봉구</option>
+                            <option value="노원구" {% if child.region == "노원구" %}selected{% endif %}>노원구</option>
+                            <option value="성북구" {% if child.region == "성북구" %}selected{% endif %}>성북구</option>
+                            <option value="강남구" {% if child.region == "강남구" %}selected{% endif %}>강남구</option>
+                            <option value="강북구" {% if child.region == "강북구" %}selected{% endif %}>강북구</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label>우울감 정도</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="depression" value="매우 좋지 않음" {% if child.depression == "매우 좋지 않음" %}checked{% endif %} disabled> 매우 좋지 않음</label>
+                            <label><input type="radio" name="depression" value="좋지 않음" {% if child.depression == "좋지 않음" %}checked{% endif %} disabled> 좋지 않음</label>
+                            <label><input type="radio" name="depression" value="보통" {% if child.depression == "보통" %}checked{% endif %} disabled> 보통</label>
+                            <label><input type="radio" name="depression" value="좋음" {% if child.depression == "좋음" %}checked{% endif %} disabled> 좋음</label>
+                            <label><input type="radio" name="depression" value="매우 좋음" {% if child.depression == "매우 좋음" %}checked{% endif %} disabled> 매우 좋음</label>
+                        </div>
+                    </li>
+                    <li>
+                        <label>부모와의 관계</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="parent_relation" value="매우 좋지 않음" {% if child.parent_relation == "매우 좋지 않음" %}checked{% endif %} disabled> 매우 좋지 않음</label>
+                            <label><input type="radio" name="parent_relation" value="좋지 않음" {% if child.parent_relation == "좋지 않음" %}checked{% endif %} disabled> 좋지 않음</label>
+                            <label><input type="radio" name="parent_relation" value="보통" {% if child.parent_relation == "보통" %}checked{% endif %} disabled> 보통</label>
+                            <label><input type="radio" name="parent_relation" value="좋음" {% if child.parent_relation == "좋음" %}checked{% endif %} disabled> 좋음</label>
+                            <label><input type="radio" name="parent_relation" value="매우 좋음" {% if child.parent_relation == "매우 좋음" %}checked{% endif %} disabled> 매우 좋음</label>
+                        </div>
+                    </li>
+                    <li>
+                        <label>교우 관계</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="friend_relation" value="매우 좋지 않음" {% if child.friend_relation == "매우 좋지 않음" %}checked{% endif %} disabled> 매우 좋지 않음</label>
+                            <label><input type="radio" name="friend_relation" value="좋지 않음" {% if child.friend_relation == "좋지 않음" %}checked{% endif %} disabled> 좋지 않음</label>
+                            <label><input type="radio" name="friend_relation" value="보통" {% if child.friend_relation == "보통" %}checked{% endif %} disabled> 보통</label>
+                            <label><input type="radio" name="friend_relation" value="좋음" {% if child.friend_relation == "좋음" %}checked{% endif %} disabled> 좋음</label>
+                            <label><input type="radio" name="friend_relation" value="매우 좋음" {% if child.friend_relation == "매우 좋음" %}checked{% endif %} disabled> 매우 좋음</label>
+                        </div>
+                    </li>
+                </ul>
+            </fieldset>
+            <div class="button-container">
+                <a href="{% url 'manage' %}"><button type="button">뒤로가기</button></a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

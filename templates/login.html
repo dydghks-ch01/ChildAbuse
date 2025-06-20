@@ -1,0 +1,33 @@
+{% extends 'login_base.html' %}
+
+{% load static %}
+
+
+{% block title %}Log In{% endblock %}
+
+{% block head %}
+  <link rel='stylesheet' href="{% static 'css/login.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="main-div">
+  <form class="auth-form" method="POST">
+    {% csrf_token %}
+    <h1>Log in</h1>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    <script>
+      alert("{{ error }}");
+    </script>
+    {% endif %}
+    <input type="text" name="userid" placeholder="ID" required>
+    <input type="password" name="pw" placeholder="password" required>
+    <button class="btn" type="submit">로그인</button>
+    <div class="auth-link">
+      <span>계정이 필요한가요?</span>
+      <a href="{% url 'signup' %}"><button class="sgu-btn" type="button">회원가입</button></a>
+    </div>
+  </form>
+</div>
+{% endblock %}

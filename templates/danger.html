@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}아동 정보 입력{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/danger.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- add1_일일위험구현법 -->
+<div class="main-div">
+  <div class="board">
+    <h1>아동 정보 입력</h1>
+    <form method="post" id="predictionForm">
+      {% csrf_token %}
+      <fieldset>
+        <legend>사용자 정보</legend>
+        <ul>
+          <li>
+            <label for="uname">이름</label>
+            <input type="text" id="uname" name="name" required>
+          </li>
+          <li>
+            <label for="uid">아이디</label>
+            <input type="text" id="uid" name="user_id" required>
+          </li>
+        </ul>
+      </fieldset>
+      <button type="submit">예측하기</button>
+    </form>
+
+    <!-- 로딩 화면 -->
+    <div class="loader" id="loader" style="display: none;">로딩 중...</div>
+
+    <!-- 예측 결과 -->
+    <div class="content" id="content" style="display: none;">
+      <h2>예측 결과</h2>
+      <p id="risk_prob_text">학대 위험 확률: --%</p>
+      <p id="abuse_type_text">학대 예측: --</p>
+    </div>
+  </div>
+</div>
+<script>
+  document.querySelector('#predictionForm').onsubmit = function (event) {
+    event.preventDefault();
+
+    // 로딩 화면 표시
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('content').style.display = 'none';
+
+    var formData = new FormData(event.target);
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch('/danger/', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRFToken': csrfToken
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().catch(() => {
+            throw new Error('서버 응답을 처리할 수 없습니다.');
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+
+        // 예측 결과 표시
+        document.getElementById('risk_prob_text').textContent =
+          `학대 위험 확률: ${data.risk_prob !== undefined ? data.risk_prob : '--'}%`;
+        document.getElementById('abuse_type_text').textContent =
+          `학대 예측: ${data.abuse_type || '--'}`;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+
+        // 오류 발생 시 기본 메시지 표시
+        document.getElementById('risk_prob_text').textContent = '오류: 데이터를 불러올 수 없습니다.';
+        document.getElementById('abuse_type_text').textContent = '예측을 수행할 수 없습니다.';
+      });
+  };
+</script>
+
+{% endblock %}

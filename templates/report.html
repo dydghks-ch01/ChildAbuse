@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}홈 - 아학방페{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/report.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="main-div">
+  <div class="container">
+    <div class="alert-text">
+      이 페이지는 <br>아동학대 신고 및 긴급 연락망에<br>대한 중요한 정보를 제공합니다.<br>
+      아래의 기관 연락처를 확인해 주세요. <br>
+    </div>
+
+    <h2 style="color: #2E7D32;">아동학대 신고 및 연락망</h2>
+    <table>
+      <tr>
+        <th>전화번호</th>
+        <th>기관</th>
+      </tr>
+      <tr>
+        <td class="highlight">112</td>
+        <td><a href="https://www.police.go.kr" target="_blank"><i class="fas fa-phone-alt icon"></i>경찰청 (긴급 신고)</a></td>
+      </tr>
+      <tr>
+        <td class="highlight">129</td>
+        <td><a href="https://www.mohw.go.kr" target="_blank"><i class="fas fa-hospital icon"></i>보건복지부 (아동보호 상담)</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="highlight">1391</td>
+        <td><a href="https://www.klac.or.kr" target="_blank"><i class="fas fa-gavel icon"></i>법률구조공단 (법률 상담)</a></td>
+      </tr>
+      <tr>
+        <td class="highlight">1388</td>
+        <td><a href="https://www.cyber1388.kr" target="_blank"><i class="fas fa-users icon"></i>청소년 상담센터</a></td>
+      </tr>
+    </table>
+  </div>
+</div>
+{% endblock %}

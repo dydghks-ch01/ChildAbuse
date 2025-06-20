@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}아이 관리 - 아학방페{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/manage.css' %}">
+<style>
+    table {
+        width: 50%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .register-btn {
+        margin: 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- add1_아이관리구현법 -->
+<div class="main-div">
+    <div class="board">
+        <h1>아이 관리 페이지</h1>
+        <a href="{% url 'manage_form' %}"><button class="register-btn">아이등록</button></a>
+
+        <table class="post-list">
+            <thead>
+                <tr>
+                    <th>관리자</th>
+                    <th>아이이름</th>
+                    <th>지역</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for child in children %}
+                <tr onclick="location.href='{% url 'manage_detail' child.id %}'">
+                    <td>{{ child.teacher_id }}</td>
+                    <td>{{ child.name }}</td>
+                    <td>{{ child.region }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">등록된 아이가 없습니다.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

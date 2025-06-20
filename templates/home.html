@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아학방페</title>
+  <link rel='stylesheet' href="{% static 'css/home.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-right">
+      <a href="{% url 'login' %}" class="login-btn">로그인</a>
+      <a href="{% url 'signup' %}" class="signup-btn">회원가입</a>
+    </div>
+  </header>
+  <section id="p1">
+    <div class="container">
+      <div class="text-box">
+        <p id="">당신이 보지 못하는 곳은</p>
+        <p id=""></p>
+        <p id="">우리가 보겠습니다.</p>
+      </div>
+    </div>
+  </section>
+  <section id="p2">
+    <div class="text-box">
+      <p id="">아동학대로 매년 더 많은 아이들이 죽고 있습니다.</p>
+      <p id="">2024년 이후 <span id="count">217</span><span>명</span> 아이들의 삶이 슬픈 기록으로 끝났습니다.</p>
+    </div>
+  </section>
+  <section id="p3">
+    <div class="text-box">
+      <p id="">우리는 아이들을 지키려고 합니다.</p>
+    </div>
+    <div class="content-box">
+      <a class="box" id="">
+        <img src="/static/images/home3.png" alt="">
+        <p id="">아이 관리</p>
+      </a>
+      <a class="box" id="">
+        <img src="/static/images/home1.png" alt="">
+        <p id="">학대 위험도 예측</p>
+      </a>
+      <a class="box" id="">
+        <img src="/static/images/home2.png" alt="">
+        <p id="">자동 신고 및 보호</p>
+      </a>
+    </div>
+  </section>
+  <section id="p4">
+    <div class="container">
+      <div class="connect-page">
+        <!-- html 수정사항 -->
+        <h1 id="fade-in-box">
+          <span class="violent">폭력</span>은 아이들의 침묵을 만들고,
+          <br>
+          <span class="love">사랑</span>은 아이들의 목소리를 찾습니다.
+        </h1>
+        <!-- html 끝, 밑에 스크립트에 이어서... -->
+      </div>
+    </div>
+  </section>
+  <section id="p5">
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span id="closeModalBtn" class="close">&times;</span>
+        <h1>CONTACT</h1>
+        <h2><br></h2>
+        <h2><br></h2>
+        <form id="contactForm">
+          <label for="email">E-MAIL</label>
+          <input type="email" id="email" name="email" autofocus required><br><br>
+
+          <label for="message">REQUIRE</label><br>
+          <textarea id="message" name="message" rows="4" required></textarea><br><br>
+
+          <button type="submit">SUBMIT</button>
+        </form>
+      </div>
+    </div>
+    <button id="openModalBtn">CONTACT</button>
+  </section>
+
+
+  <script>
+    function animateNumber(target, elementId, duration) {
+      let start = 0;
+      const stepTime = Math.abs(Math.floor(duration / target));
+      const element = document.getElementById(elementId);
+
+      const timer = setInterval(() => {
+        start += 1;
+        element.innerText = start;
+
+        if (start >= target) {
+          clearInterval(timer); // 목표 숫자에 도달하면 멈춤
+        }
+      }, stepTime);
+    }
+
+    // 두 번째 섹션이 보일 때 숫자 애니메이션 실행
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateNumber(217, "count", 1500);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.7 });
+
+    observer.observe(document.getElementById("p2"));
+
+    document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("modal");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const contactForm = document.getElementById("contactForm");
+  const openModalBtn = document.getElementById("openModalBtn");
+
+  closeModalBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  openModalBtn.addEventListener("click", () => {
+    modal.style.display = "flex";
+  });
+
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const message = document.getElementById("message").value;
+
+    console.log("이메일:", email);
+    console.log("문의 내용:", message);
+
+
+    modal.style.display = "none";
+
+    contactForm.reset();
+  });
+});
+
+
+
+
+    // 수정사항
+
+    // 네 번째 섹션(#p4)이 보일 때 fade-in 애니메이션 실행
+    const fadeInObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.getElementById("fade-in-box").classList.add("show"); // 애니메이션 실행
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.7 });
+
+    fadeInObserver.observe(document.getElementById("p4"));
+
+    // 끝
+
+
+
+
+
+
+
+    // // p3 섹션의 텍스트 박스 애니메이션
+    // document.addEventListener("DOMContentLoaded", () => {
+    //   const p3Text = document.querySelector("#p3 .text-box");
+
+    //   const observerP3 = new IntersectionObserver((entries) => {
+    //     entries.forEach((entry) => {
+    //       if (entry.isIntersecting) {
+    //         p3Text.classList.add("show"); // 애니메이션 실행
+    //       } else {
+    //         p3Text.classList.remove("show"); // 다시 사라지게 (옵션)
+    //       }
+    //     });
+    //   }, { threshold: 0.5 });
+
+    //   observerP3.observe(document.getElementById("p3"));
+    // });
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}홈 - 아학방페{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/result.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- add1_일일위험구현법 -->
+<div class="main-div">
+  <div class="board">
+    <h1>설문 결과</h1>
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="result-container">
+      <p>총 점수: {{ total_score }} / 75</p>
+      <p>결과: {{ result }}</p>
+      <a href="{% url 'check' %}"><button>아이관리로 돌아가기</button></a>
+    </div>
+  </div>
+  <!--
+  <table class="post-list">
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>날짜</th>
+        <th>제목</th>
+      </tr>
+    </thead>
+    <tbody id="surveyBoard">
+    </tbody>
+  </table>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="이름 또는 아이디 검색">
+    <button id="searchButton" onclick="filterResults()">검색</button>
+  </div>
+
+  <div class="pagination">
+    <button id="prevPage" onclick="changePage(-1)" disabled>이전</button>
+    <span id="pageNumber">1</span>
+    <button id="nextPage" onclick="changePage(1)">다음</button>
+  </div>
+</div>
+-->
+
+  <script>
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let allResponses = JSON.parse(localStorage.getItem("allResponses")) || [];
+
+    document.addEventListener("DOMContentLoaded", function () {
+      loadSurveyResults();
+      updatePaginationButtons();
+    });
+
+    function loadSurveyResults() {
+      let board = document.getElementById("surveyBoard");
+      board.innerHTML = "";
+
+      let start = (currentPage - 1) * itemsPerPage;
+      let end = start + itemsPerPage;
+      let paginatedData = allResponses.slice(start, end);
+
+      paginatedData.forEach((response, index) => {
+        let formattedDate = formatDate(response.date || new Date().toISOString());
+
+        let newRow = `<tr onclick="viewSurveyDetail(${start + index})">
+                          <td>${start + index + 1}</td>
+                          <td>${formattedDate}</td>
+                          <td><a href="#">${response.name} (아이디: ${response.userId}) 님의 설문 결과</a></td>
+                        </tr>`;
+        board.innerHTML += newRow;
+      });
+
+      updatePaginationButtons();
+    }
+
+    function viewSurveyDetail(index) {
+      localStorage.setItem("selectedSurvey", JSON.stringify(allResponses[index]));
+      location.href = "{% url 'detail' %}";
+    }
+
+    function filterResults() {
+      let query = document.getElementById("searchInput").value.toLowerCase();
+      allResponses = JSON.parse(localStorage.getItem("allResponses")) || [];
+
+      if (query) {
+        allResponses = allResponses.filter(response =>
+          response.name.toLowerCase().includes(query) ||
+          response.userId.toLowerCase().includes(query)
+        );
+      } else {
+        allResponses = JSON.parse(localStorage.getItem("allResponses")) || [];
+      }
+
+      currentPage = 1;
+      loadSurveyResults();
+    }
+
+    function changePage(direction) {
+      currentPage += direction;
+      loadSurveyResults();
+    }
+
+    function updatePaginationButtons() {
+      document.getElementById("pageNumber").innerText = currentPage;
+      document.getElementById("prevPage").disabled = currentPage === 1;
+      document.getElementById("nextPage").disabled = currentPage * itemsPerPage >= allResponses.length;
+    }
+
+    function formatDate(dateString) {
+      const days = ['일', '월', '화', '수', '목', '금', '토'];
+      const date = new Date(dateString);
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const weekDay = days[date.getDay()];
+
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const ampm = hours >= 12 ? "오후" : "오전";
+
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      hours = String(hours).padStart(2, "0");
+
+      return `${year}.${month}.${day}(${weekDay}) ${ampm} ${hours}:${minutes}`;
+    }
+  </script>
+  {% endblock %}

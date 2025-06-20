@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}설문 결과{% endblock %}
+
+{% block head %}
+<link rel='stylesheet' href="{% static 'css/detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- add1_일일위험구현법 -->
+<div class="board">
+  <div>
+    <h1>설문 응답 상세 내용</h1>
+    <div id="surveyDetails"></div>
+    <button onclick="goResult()">뒤로가기</button>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let surveyData = JSON.parse(localStorage.getItem("selectedSurvey")) || {};
+    let detailView = document.getElementById("surveyDetails");
+
+    // 날짜 포맷팅 함수
+    function formatDate(dateString) {
+      const days = ['일', '월', '화', '수', '목', '금', '토'];
+      const date = new Date(dateString);
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const dayOfWeek = days[date.getDay()];
+
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? '오후' : '오전';
+
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      hours = String(hours).padStart(2, '0');
+
+      return `${year}.${month}.${day}(${dayOfWeek}) ${ampm} ${hours}:${minutes}`;
+    }
+
+    detailView.innerHTML += `<p><b>이름:</b> ${surveyData.name}</p>`;
+    detailView.innerHTML += `<p><b>아이디:</b> ${surveyData.userId}</p>`;
+    detailView.innerHTML += `<p><b>제출 날짜:</b> ${formatDate(surveyData.date)}</p><hr>`;
+
+    const questions = {
+      "Q1": "최근 아이가 평소보다 위축되거나 불안한 모습을 보이나요?",
+      "Q2": "아이가 갑자기 공격적인 행동을 보이나요?",
+      "Q3": "아이가 특정 신체 부위를 자주 숨기려 하거나 멍, 상처가 자주 발견되나요?",
+      "Q4": "아이가 수면 장애(악몽, 불면증 등)를 겪고 있다고 보이나요?",
+      "Q5": "아이가 특정 상황(예: 큰 소리, 특정 단어)에 과민 반응을 보이나요?",
+      "Q6": "부모가 등·하원 시 아이에게 과도한 신체적 접촉을 하나요?",
+      "Q7": "부모가 아이에게 위협적인 언행을 하나요?",
+      "Q8": "아이가 부모와의 관계에 대해 말할 때 지속적으로 부정적인 표현을 하나요?",
+      "Q9": "아이가 가정에서의 생활에 대해 이야기할 때 비정상적으로 회피하는 경향을 보이나요?",
+      "Q10": "부모가 등·하원 시 눈에 띄게 화가 나 있거나 감정 기복이 심한 모습을 보이나요?",
+      "Q11": "아이가 수업 중에도 지속적으로 집중하지 못하거나 산만한 모습을 보이나요?",
+      "Q12": "아이가 또래 친구들과의 관계에서 지속적으로 위축되거나 왕따를 당하는 모습이 보이나요?",
+      "Q13": "아이가 지속적으로 슬퍼하거나 무기력한 상태를 보이나요?",
+      "Q14": "최근 아이가 식사량이 갑자기 줄었거나 과식하는 경향을 보이나요?",
+      "Q15": "아이가 또래보다 말이 늦거나, 언어 표현이 제한적인 모습을 보이나요?"
+    };
+
+    let totalScore = 0;
+    let riskLevel = '';
+
+    // 각 문항에 대한 답변을 출력하고 점수 계산
+    Object.keys(questions).forEach((key, index) => {
+      let answer = surveyData[key] || "응답 없음";
+      let score = 0;
+
+      // 점수 부여
+      switch (answer) {
+        case "매우 아니다":
+          score = 0;
+          break;
+        case "아니다":
+          score = 1;
+          break;
+        case "보통":
+          score = 2;
+          break;
+        case "맞다":
+          score = 3;
+          break;
+        case "매우 맞다":
+          score = 4;
+          break;
+      }
+
+      totalScore += score;
+      detailView.innerHTML += `<p><b>${index + 1}. ${questions[key]}</b> <br>답변: ${answer} (점수: ${score})</p>`;
+    });
+
+    // 위험도 계산
+    if (totalScore <= 25) {
+      riskLevel = "낮음";
+    } else if (totalScore <= 45) {
+      riskLevel = "보통";
+    } else {
+      riskLevel = "높음";
+    }
+
+    detailView.innerHTML += `<hr><p><b>총점:</b> ${totalScore} (최대 60점)</p>`;
+    detailView.innerHTML += `<p><b>위험도:</b> ${riskLevel}</p>`;
+  });
+</script>
+
+</body>
+{% endblock %}
