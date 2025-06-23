@@ -657,3 +657,9 @@ Watching for file changes with StatReloader
 Not Found: /.well-known/appspecific/com.chrome.devtools.json
 Not Found: /.well-known/appspecific/com.chrome.devtools.json
 Not Found: /favicon.ico
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+Check: name=최용환, teacher_id=user1, total_score=0
+Check: name=최용환, teacher_id=user1, total_score=0
+Check: name=user1, teacher_id=user1, total_score=0
+Internal Server Error: /danger/
